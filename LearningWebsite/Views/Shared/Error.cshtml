@@ -1,0 +1,14 @@
+﻿@model LearningWebsite.Models.ViewModels.ErrorModel
+
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-dismissable alert-danger">
+    <h4>
+        ERROR!
+    </h4> 
+   <strong>@Model.PageName</strong>: @Model.ErrorMessage
+</div>
+

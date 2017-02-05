@@ -1,0 +1,147 @@
+﻿@using LearningWebsite.Controllers
+@using LearningWebsite.Models.DbModels
+@model LearningWebsite.Models.ViewModels.HomePageViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Learning Web Site!</title>
+    
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div >
+                <div id="searchArea" style="text-align: center; margin-top: 50px">
+
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new {@class = "navbar-form navbar-center", @role = "search"}))
+                    {
+                        <div class="form-group">
+                            <input type="text" class="form-control" style="width: 500px;" name="searchTerm" required>
+                        </div>
+
+                        <button type="submit" class="btn active btn-primary">
+                            <i class="glyphicon glyphicon-search"></i> Search
+                        </button>
+                    }
+
+                </div>
+                
+                @if (IsPost && !Model.SearchResultCourseMaterials.Any() && !Model.SearchResultCourses.Any())
+                {
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="ResultsRegion" style="margin-top: 10px">
+                                <span>No Results Found.</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.SearchResultCourseMaterials.Any())
+                {
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Matched Course Materials
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="CoursesMaterialRegion" style="margin-top: 10px">
+                                <table id="tableCoursesMaterial" class="table table-striped table-hover table-condensed">
+                                    <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Rate
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    @foreach (var courseM in Model.SearchResultCourseMaterials)
+                                    {
+                                        <tr onclick="location.href = '@Url.Action("Details", "CourseMaterial", new {id = courseM.Id})'" style="cursor: pointer">
+
+                                            <td>@courseM.Title</td>
+                                            <td>
+                                                @{
+                                                    string name = courseM.Rating + ".gif";
+                                                } 
+                                                <img src="@Url.Content($"~/Content/Images/starts_rating/Stars{name}")"/>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.SearchResultCourses.Any())
+                {
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Matched Courses
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="CoursesRegion" style="margin-top: 10px">
+
+                                <table id="tableMaterial" class="table table-striped table-hover table-condensed">
+                                    <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Name
+                                        </th>
+
+
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    @foreach (var course in Model.SearchResultCourses)
+                                    {
+                                        <tr onclick="location.href = '@(Url.Action("Index", "CourseDetails", new {id = course.Id}))'" style="cursor: pointer">
+                                            <td>
+                                                @course.Name
+                                            </td>
+
+                                        </tr>
+                                    }
+                                    <tbody/>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
